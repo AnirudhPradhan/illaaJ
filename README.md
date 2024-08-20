@@ -1,17 +1,9 @@
 # illaaJ - The AI Doctor Assistant
 
-![Project Logo](link-to-your-logo.png)
+<!--![Project Logo](link-to-your-logo.png)-->
 
 illaaJ is an AI-powered doctor assistant that helps you detect diseases based on your symptoms and provides home remedies. With a simple and intuitive interface, illaaJ aims to offer quick and accessible healthcare solutions to everyone.
 
-## Table of Contents
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ## Features
 - **Symptom Detection:** Enter your symptoms, and illaaJ will provide a list of potential diseases.
@@ -19,63 +11,52 @@ illaaJ is an AI-powered doctor assistant that helps you detect diseases based on
 - **User-Friendly Interface:** Simple design with easy navigation to ensure a seamless user experience.
 - **Fast and Accurate:** Leveraging AI to quickly provide accurate diagnostic results.
 
+## Made-with
+
+| Tech used    | For                                       |
+| ------------ | ----------------------------------------- |
+| Flask        | A lightweight WSGI web application framework.                                   |
+| Python      | The primary programming language used in this project.                                  |
+| Prompt Engineering  | Techniques for crafting effective prompts for AI models. |
+| AI/ML | To power the disease detection based on symptoms.         |
+
 ## Installation
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/illaaJ.git
-   cd illaaJ
-Made with
-Tech used	For
-React.js	Frontend
-Flask	Backend
-MongoDB	Database
-Tensorflow and CustomVision	ML model to detect ingredients in picture
-SciKit Learn	ML model to find matching recipes
-Google Cloud	Hosting
-Cloudflare	CDN for static data
-Setup process
-Frontend
-Open frontend/src/index.js and update window.APIROOT to the base URL for the backend. Default URL is given below.
-window.APIROOT = "http://127.0.0.1:4950/"
-Run the below command in frontend folder.
-npm install
-Backend
-Run the below command in backend folder.
+```
+git clone https://github.com/AnirudhPradhan/illaaJ.git
+cd illaaJ
+```
+
+## Setup process
+1. **Install Dependencies**
+
+
+```
 pip install -r requirements.txt
-Create an OAuth client ID in Google cloud console with the below info.
-# Authorized JavaScript origins
+```
+2. **Run the application**
 
-http://127.0.0.1:4950
-https://127.0.0.1:4950
+```
+python run.py
+```
+3. **Access the application:**
+Open your browser and go to http://127.0.0.1:5000
+   
+### Usage
+- Enter your symptoms on the home page.
+- Click "Diagnose" to get a list of potential diseases.
+- Review the suggested remedies for managing your symptoms at home.
 
-# Authorized redirect URIs
+### Contributing
+Contributions are welcome! Please follow these steps:
 
-http://127.0.0.1:4950/callback
-https://127.0.0.1:4950/callback
-Download the client_secret.json file and save it in the backend folder.
+1. Fork the repository.
+2. Create a new branch (git checkout -b feature-branch).
+3. Commit your changes (git commit -m 'Add some feature').
+4. Push to the branch (git push origin feature-branch).
+5. Open a pull request.
 
-Create a YouTube Data API v3 key from Google cloud console.
+### License
 
-Include an attribute data in the client_secret.json file as below.
-
-{
-  "web": {
-    // No changes here
-  },
-  "data": {
-    "redirect_uri": "http://127.0.0.1:4950/callback",
-    "home": "http://127.0.0.1:3000",
-    "mongo": "MongoDB URL here",
-    "youtube": "YouTube Data API v3 key here"
-  }
-}
-Running process
-Frontend
-Run the below command in the frontend folder.
-
-npm run start
-Backend
-Run the below command in the backend folder.
-
-python main.py
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
