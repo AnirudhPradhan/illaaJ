@@ -2,10 +2,14 @@ from flask import Flask, render_template, request, redirect, url_for
 import google.generativeai as genai
 import json
 import re
-from secure import key
+# from secure import key
+import os
 
-# Configure the Gemini API
-genai.configure(api_key=key)
+api_key = os.getenv("api_key")
+if not api_key:
+    raise ValueError("No API key found in environment variables.")
+
+genai.configure(api_key=api_key)
 
 app = Flask(__name__)
 
@@ -39,6 +43,8 @@ def get_remedies(disease):
         '''
         response = model.generate_content(prompt)
         # print(response)
+        # print(api_key)
+
         response = response.to_dict()
         text = response['candidates'][0]['content']['parts'][0]['text']
         text = format_bullet_points(text)
