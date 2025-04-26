@@ -3,16 +3,21 @@ import google.generativeai as genai
 import json
 import re
 import os
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
+app = Flask(__name__)
 
 # Retrieve the API key from environment variables
-api_key = os.getenv("api_key")
+api_key = os.environ.get("api_key1")
 if not api_key:
     raise ValueError("No API key found in environment variables.")
 
+print(api_key)
+
 # Configure the Gemini API with the retrieved API key
 genai.configure(api_key=api_key)
-
-app = Flask(__name__)
 
 def load_database():
     """Load the disease dataset from a JSON file."""
@@ -35,38 +40,38 @@ def diagnose(symptoms):
 
     return matched_diseases
 
+def format_bullet_points(text):
+    """Convert numbered text into HTML unordered list."""
+    text = re.sub(r'^##\s+', '', text, flags=re.MULTILINE)
+    # Match numbered points without markdown
+    pattern = r'(\d+\.\s)(.*?)(?=\d+\.\s|\Z)'
+    items = re.findall(pattern, text, flags=re.DOTALL)
+    
+    li_elements = [f"<li>{item[1].strip()}</li>" for item in items]
+    return f"<ul>\n" + "\n".join(li_elements) + "\n</ul>"
+
 def get_remedies(disease):
-    """Fetch and format remedies for a given disease using the Gemini API."""
+    """Fetch and format remedies using Gemini API."""
     try:
-        model = genai.GenerativeModel(model_name="gemini-1.5-flash")
-        prompt = f'''You are my assistance. Fetch the precautions for {disease} and provide in brief and return in dot points.
-        In format - {disease}:
-        1. Precaution 1
-        2. Precaution 2.. etc
-        At least write 10 precautions.
+        model = genai.GenerativeModel(model_name="gemini-2.0-flash")
+        prompt = f'''
+        List 10 precautions for {disease} in this exact format:
+        1. [Precaution 1]
+        2. [Precaution 2]
+        ...
+        10. [Precaution 10]
         '''
         response = model.generate_content(prompt)
-        text = response.to_dict()['candidates'][0]['content']['parts'][0]['text']
-        text = format_bullet_points(text)
-        return text
+        
+        # Handle API errors (Result 2)
+        if not response.candidates:
+            return "Error: No response from API"
+            
+        text = response.candidates[0].content.parts[0].text
+        return format_bullet_points(text)
+        
     except Exception as e:
         return f"Error: {str(e)}"
-
-def format_bullet_points(text):
-    """Format the text into an HTML unordered list."""
-    # Remove Markdown headings (e.g., ## Mumps)
-    text = re.sub(r'^##\s+', '', text, flags=re.MULTILINE)
-    
-    # Define the regex pattern for bullet points followed by text
-    pattern = r'(\d+\.\s)\*\*(.*?)\*\*(.*?)(?=\d+\.\s|$)'
-
-    # Replace matched pattern with HTML formatting
-    formatted_text = re.sub(pattern, r'<li><strong>\2</strong>\3</li>\n', text, flags=re.DOTALL)
-
-    # Wrap in <ul> tags to create an unordered list
-    formatted_text = f"<ul>{formatted_text}</ul>"
-    
-    return formatted_text.strip()
 
 @app.route('/', methods=['GET'])
 @app.route('/index', methods=['GET'])
