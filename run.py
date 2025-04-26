@@ -14,8 +14,6 @@ api_key = os.environ.get("api_key1")
 if not api_key:
     raise ValueError("No API key found in environment variables.")
 
-print(api_key)
-
 # Configure the Gemini API with the retrieved API key
 genai.configure(api_key=api_key)
 
